@@ -1,0 +1,95 @@
+%{
+#include "y.tab.h"
+%}
+%%
+void|main ;
+int|float|double|char ;
+^[a-zA-Z_][a-zA-Z0-9_]* { yylval.p = yytext;return ID;}
+[ \n\t] ;
+. ;
+%%
+
+yaac
+%{
+ #include<stdio.h>
+ #include<stdlib.h>
+ #include<string.h>
+ int yylex();
+ void splitFile();
+ void yyerror(const char *s);
+ void add(char* s);
+ int randomVal();
+ char id[100][100];
+ int length=0;
+ extern FILE *yyin;
+
+%}
+%union {char* p;}
+%token <p> ID
+%%
+S:S T
+| T
+;
+T: ID {add($1);}
+;
+%%
+int main(){
+ for(int i = 0;i<100;i++){
+ strcpy(id[i],"");
+ }
+ splitFile();
+ yyin=fopen("prg1.txt","r");
+ yyparse();
+ for(int i=0;i<length;i++){
+ printf("%s\t|\t0x%d\t|\t%d\t\n",id[i],randomVal(),randomVal());
+}
+ return 0;
+}
+void splitFile(){
+ FILE *raw;
+ FILE *inp;
+ raw = fopen("prg.txt", "r");
+ inp = fopen("prg1.txt","w");
+ if ( raw != NULL || inp != NULL )
+ {
+ do{
+ char c = fgetc(raw);
+ if (feof(raw))
+ break ;
+ if(c == ' '){
+ fputc('\n', inp);
+ }else if(c==';' || c=='=' || c=='('|| c==')'){
+ fputc('\n', inp);
+ fputc(c,inp);
+ fputc('\n', inp);
+ }else if(c=='\n'){
+ //
+ }else{
+ fputc(c, inp);
+ }
+ } while(1);
+ }
+ fclose(raw);
+ fclose(inp);
+}
+int randomVal(){
+ return rand() % (1000 - 0 + 1) + 0;
+}
+int yywrap(){
+ return 1;
+}
+void yyerror(const char* s){
+ printf("Error\n");
+ printf("%s\n",s);
+ exit(1);
+}
+void add(char* s){
+
+ for(int i = 0;i<length;i++){
+ if(strcmp(id[i],s)==0){
+ return;
+ }
+ }
+ strcpy(id[length++],s);
+
+ }
