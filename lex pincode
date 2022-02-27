@@ -1,0 +1,14 @@
+%%
+[6]{1}[0-9]{5} {printf("Valid pincode");}
+. {printf("Invalid pincode");exit(0);}
+\n return 0;
+%%
+int main()
+{
+printf("enter the pincode");
+yylex();
+}
+int yywrap()
+{
+return 0;
+}
