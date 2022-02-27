@@ -1,0 +1,33 @@
+%{
+#include "y.tab.h"
+%}
+%%
+0[1-9]|1[0-2] {return M;}
+\/ {return B;}
+[1-9]|[1-2][0-9]|3[0-1] {return D;}
+[1-2][0-9][0-9][0-9] {return Y;}
+\n {return NL;}
+%%
+
+yaac
+%{
+ /* Definition section */
+ #include<stdio.h>
+ #include<stdlib.h>
+%}
+%token D B M Y NL
+%%
+stmt: D B M B Y NL { printf("Valid date format\n");
+ exit(0); }
+;
+%%
+int yyerror()
+{
+ printf("Invalid date format\n");
+ exit(0);
+}
+main()
+{
+ printf("enter the date: \n");
+ yyparse();
+}
