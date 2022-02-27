@@ -1,0 +1,32 @@
+lex:
+%{
+#include "y.tab.h"
+%}
+%%
+[6]{1}[0-9]{2} {return A;}
+\- {return B;}
+[0-9]{3} {return C;}
+\n {return NL;}
+%%
+yaac
+%{
+ /* Definition section */
+ #include<stdio.h>
+ #include<stdlib.h>
+%}
+%token A B C NL
+%%
+stmt: A B C NL { printf("It is a Tamilnadu pincode\n");
+ exit(0); }
+;
+%%
+int yyerror()
+{
+ printf("Invalid pincode\n");
+ exit(0);
+}
+ main()
+{
+ printf("enter the pincode: \n");
+ yyparse();
+}
