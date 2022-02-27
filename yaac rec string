@@ -1,0 +1,41 @@
+%{
+ #include<stdio.h>
+ #include<stdlib.h>
+ #include "y.tab.h"
+%}
+%%
+a { return A;}
+b { return B;}
+[ \t] {;}
+\n {return 0;}
+. return yytext[0];
+%%
+int yywrap()
+{
+ return 1;
+}
+
+yaac
+%{
+ #include<stdio.h>
+ #include<stdlib.h>
+ #include "y.tab.h"
+ void yyerror();
+%}
+%token A B
+%%
+stmt : S
+ |
+ ;
+S : A S B
+ |
+ ;
+%%
+void main()
+{ printf("Enter the sting:"); yyparse();
+ printf("Accepted\n");
+ exit(0);
+}
+void yyerror(char *S)
+{ printf("Not accepted\n"); exit(0);
+}
