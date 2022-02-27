@@ -1,0 +1,34 @@
+%{
+#include "y.tab.h"
+%}
+%%
+[a-z]* {return C;}
+@ {return B;}
+[a-z0-9]* {return A;}
+\. {return D;}
+%%
+
+yaac
+%{
+ #include<stdio.h>
+ #include<stdlib.h>
+%}
+
+%token A B C D
+%%
+stmt: A B C D C { printf("Valid Email ID\n"); exit(0); }
+;
+%%
+
+int yyerror()
+{
+ printf("invalid Email ID\n");
+ exit(0);
+}
+
+//driver code
+main()
+{
+ printf("Enter the Email ID: \n");
+ yyparse();
+}
