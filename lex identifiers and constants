@@ -1,0 +1,32 @@
+%{
+#include<stdio.h>
+int count=0;
+int cons=0;
+%}
+letter [a-zA-Z]
+digitt [0-9]
+id {letter}*|({letter}{digitt})+
+notid ({digitt}{letter})+
+constants {digitt}+
+%%
+{id} {printf("%s is an identifier\n", yytext); count++;}
+{notid} {printf("%s is not an identifier\n", yytext);}
+{constants} {printf("%s is a constant\n", yytext); cons++;}
+%%
+int main()
+{
+FILE *fp;
+char file[10];
+printf("\nEnter the filename: ");
+scanf("%s", file);
+fp=fopen(file,"r");
+yyin=fp;
+yylex();
+printf("Number of identifiers %d\n", count);
+printf("Number of constants: %d\n", cons);
+return 0;
+}
+int yywrap()
+{
+return 1;
+}
